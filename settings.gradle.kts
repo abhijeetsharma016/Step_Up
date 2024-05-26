@@ -19,5 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Step Up"
-include ':app'
+rootProject.name = "StepUp"
+include(":app")
+ 
