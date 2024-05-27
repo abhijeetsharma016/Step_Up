@@ -25,9 +25,9 @@ class WelcomeScreen : AppCompatActivity() {
         setContentView(R.layout.activity_welcome_screen)
         setContentView(binding.root)
         Handler(Looper.getMainLooper()).postDelayed({
-            startActivity(Intent(this, MainActivity::class.java))
+                startActivity(Intent(this, MainActivity::class.java))
             finish()
-        }, 300)
+        }, 3000)
 
         val welcomeText = "Welcome To Step Counter"
         val spannableString =SpannableString(welcomeText)
