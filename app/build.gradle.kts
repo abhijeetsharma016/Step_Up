@@ -7,6 +7,10 @@ android {
     namespace = "com.example.stepup"
     compileSdk = 34
 
+    viewBinding{
+        enable = true
+    }
+
     defaultConfig {
         applicationId = "com.example.stepup"
         minSdk = 24
