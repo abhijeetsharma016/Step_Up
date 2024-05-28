@@ -1,6 +1,7 @@
 package com.example.stepup
 
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -13,28 +14,34 @@ import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+
 
 class MainActivity : AppCompatActivity(),SensorEventListener  {
 
+    private val ACTIVITY_RECOGNITION_PERMISSION_CODE = 1
 
-    // we have assigned sensorManger to nullable
+
     private var sensorManager: SensorManager? = null
 
-    // Creating a variable which will give the running status
-    // and initially given the boolean value as false
+
     private var running = false
 
-    // Creating a variable which will counts total steps
-    // and it has been given the value of 0 float
     private var totalSteps = 0f
 
-    // Creating a variable  which counts previous total
-    // steps and it has also been given the value of 0 float
     private var previousTotalSteps = 0f
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        if (ContextCompat.checkSelfPermission(this, "android.permission.ACTIVITY_RECOGNITION")!= PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf("android.permission.ACTIVITY_RECOGNITION"), ACTIVITY_RECOGNITION_PERMISSION_CODE)
+        }
+
+
+
 
         loadData()
         resetSteps()
@@ -58,8 +65,6 @@ class MainActivity : AppCompatActivity(),SensorEventListener  {
         running = true
 
         // Returns the number of steps taken by the user since the last reboot while activated
-        // This sensor requires permission android.permission.ACTIVITY_RECOGNITION.
-        // So don't forget to add the following permission in AndroidManifest.xml present in manifest folder of the app.
         val stepSensor = sensorManager?.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
 
 
@@ -111,9 +116,7 @@ class MainActivity : AppCompatActivity(),SensorEventListener  {
 
     private fun saveData() {
 
-        // Shared Preferences will allow us to save
-        // and retrieve data in the form of key,value pair.
-        // In this function we will save data
+        //shared preference will save data in key and value pair
         val sharedPreferences = getSharedPreferences("myPrefs", Context.MODE_PRIVATE)
 
         val editor = sharedPreferences.edit()
@@ -135,5 +138,23 @@ class MainActivity : AppCompatActivity(),SensorEventListener  {
 
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
         // We do not have to write anything in this function for this app
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            ACTIVITY_RECOGNITION_PERMISSION_CODE -> {
+                if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
+                    // Permission granted
+                } else {
+                    // Permission denied
+                    Toast.makeText(this, "Permission denied to read your Physical activity", Toast.LENGTH_SHORT).show()
+                }
+                return
+            }
+            else -> {
+                // Ignore all other requests
+            }
+        }
     }
 }
