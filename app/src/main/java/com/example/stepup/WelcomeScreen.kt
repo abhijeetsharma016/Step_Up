@@ -25,7 +25,7 @@ class WelcomeScreen : AppCompatActivity() {
         setContentView(R.layout.activity_welcome_screen)
         setContentView(binding.root)
         Handler(Looper.getMainLooper()).postDelayed({
-                startActivity(Intent(this, MainActivity::class.java))
+                startActivity(Intent(this, signupActivity::class.java))
             finish()
         }, 3000)
 
