@@ -25,13 +25,15 @@ class WelcomeScreen : AppCompatActivity() {
         setContentView(R.layout.activity_welcome_screen)
         setContentView(binding.root)
         Handler(Looper.getMainLooper()).postDelayed({
-                startActivity(Intent(this, signupActivity::class.java))
+                startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }, 3000)
 
-        val welcomeText = "Welcome To Step Counter"
+        val welcomeText = "Welcome"
         val spannableString =SpannableString(welcomeText)
         spannableString.setSpan(ForegroundColorSpan(Color.parseColor("#FF0000")), 0,5,0)
         spannableString.setSpan(ForegroundColorSpan(Color.parseColor("#312222")), 5,welcomeText.length,0)
+
+        binding.welcomeText.text = spannableString
     }
 }

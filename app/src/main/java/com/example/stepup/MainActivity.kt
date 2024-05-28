@@ -1,20 +1,21 @@
 package com.example.stepup
 
 import android.content.Context
+import android.graphics.Color
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 
 class MainActivity : AppCompatActivity(),SensorEventListener  {
-    // Added SensorEventListener the MainActivity class
-    // Implement all the members in the class MainActivity
-    // after adding SensorEventListener
+
 
     // we have assigned sensorManger to nullable
     private var sensorManager: SensorManager? = null
@@ -30,6 +31,7 @@ class MainActivity : AppCompatActivity(),SensorEventListener  {
     // Creating a variable  which counts previous total
     // steps and it has also been given the value of 0 float
     private var previousTotalSteps = 0f
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -39,6 +41,16 @@ class MainActivity : AppCompatActivity(),SensorEventListener  {
 
         // Adding a context of SENSOR_SERVICE as Sensor Manager
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+
+
+        //just practicing spannable string
+        val welcomeText = "Welcome to Step-Up Counter"
+        val spannableString = SpannableString(welcomeText)
+        spannableString.setSpan(ForegroundColorSpan(Color.parseColor("#FF0000")), 0,11,0)
+        spannableString.setSpan(ForegroundColorSpan(Color.parseColor("#312222")), 11,welcomeText.length,0)
+
+        var text = findViewById<TextView>(R.id.Heading)
+        text.text = spannableString
     }
 
     override fun onResume() {
@@ -81,7 +93,6 @@ class MainActivity : AppCompatActivity(),SensorEventListener  {
     fun resetSteps() {
         var tv_stepsTaken = findViewById<TextView>(R.id.tv_stepsTaken)
         tv_stepsTaken.setOnClickListener {
-            // This will give a toast message if the user want to reset the steps
             Toast.makeText(this, "Long tap to reset steps", Toast.LENGTH_SHORT).show()
         }
 
@@ -89,8 +100,6 @@ class MainActivity : AppCompatActivity(),SensorEventListener  {
 
             previousTotalSteps = totalSteps
 
-            // When the user will click long tap on the screen,
-            // the steps will be reset to 0
             tv_stepsTaken.text = 0.toString()
 
             // This will save the data
